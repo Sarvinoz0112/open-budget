@@ -1,47 +1,42 @@
 import psycopg2
-from db_configs.config import DB_CONFIG
+from psycopg2 import sql
+import os
 
-class DBSettings:
-    """Context manager for database operations."""
-    def __enter__(self):
-        self.conn = psycopg2.connect(**DB_CONFIG)
-        self.cursor = self.conn.cursor()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is not None:
-            self.conn.rollback()
-        else:
-            self.conn.commit()
-
-        self.cursor.close()
-        self.conn.close()
+class Database:
+    def __init__(self):
+        self.connection = psycopg2.connect(
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST")
+        )
+        self.cursor = self.connection.cursor()
 
     def execute(self, query, params=None):
-        """Executes a data modification query."""
+        if params is None:
+            params = ()
         self.cursor.execute(query, params)
+        self.connection.commit()
 
     def fetchall(self, query, params=None):
-        """Returns all rows matching the query."""
+        if params is None:
+            params = ()
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
 
     def fetchone(self, query, params=None):
-        """Returns one row matching the query."""
+        if params is None:
+            params = ()
         self.cursor.execute(query, params)
         return self.cursor.fetchone()
 
+db = Database()
+
 def execute_query(query, params=None):
-    """Executes a data modification query."""
-    with DBSettings() as db:
-        db.execute(query, params)
+    db.execute(query, params)
 
 def fetchall(query, params=None):
-    """Returns all rows matching the query."""
-    with DBSettings() as db:
-        return db.fetchall(query, params)
+    return db.fetchall(query, params)
 
 def fetchone(query, params=None):
-    """Returns one row matching the query."""
-    with DBSettings() as db:
-        return db.fetchone(query, params)
+    return db.fetchone(query, params)
