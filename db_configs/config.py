@@ -16,3 +16,4 @@ DB_CONFIG = {
     "port": DB_PORT,
     "password": DB_PASS
 }
+

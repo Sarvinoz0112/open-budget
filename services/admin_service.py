@@ -8,16 +8,12 @@ def authenticate_admin():
     password = "admin"
 
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
-
     admin = fetchone("""
-    SELECT user_id FROM users WHERE username = %s AND password = %s AND role = 'admin'
+    SELECT id FROM users WHERE username = %s AND password = %s AND role = 'admin'
     """, (username, hashed_password))
-
     if admin:
-        return True
-    else:
-        return False
-
+        return {'who': 'admin'}
+    return None
 
 def admin_menu():
     """Display the admin menu."""
