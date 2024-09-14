@@ -96,7 +96,6 @@ def is_season_active():
         if is_open:
             return True
         if close_time and datetime.now() >= close_time:
-            # Close the season if the current time is past the close time
             close_season(close_time)
             return False
     return False

@@ -29,7 +29,6 @@ def login_user(username, password):
 
 
 def check_admin(username, password):
-    # Admin credentials
     admin_username = 'admin'
     admin_password = 'admin'
 

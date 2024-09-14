@@ -4,12 +4,9 @@ from service.project import create_project, approve_project, reject_project, vie
 from db_configs.db_settings import execute_query
 from db_configs.queries import create_user_table, create_project_table, open_season, close_season, get_season_status, \
     create_season_table, view_all_seasons_with_status
-import sys
 from tabulate import tabulate
 from datetime import datetime
 
-
-# Create tables before running the menu
 def create_tables():
     execute_query(create_user_table())
     execute_query(create_project_table())
@@ -191,7 +188,7 @@ def main_menu():
 
         elif choice == '3':
             print("Exiting the system.")
-            sys.exit()
+            break
 
         else:
             print("Invalid choice. Please try again.")
