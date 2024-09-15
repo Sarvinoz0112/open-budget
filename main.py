@@ -8,12 +8,14 @@ from tabulate import tabulate
 from datetime import datetime
 
 def create_tables():
+    '''Creates the necessary database tables for users, projects, and seasons.'''
     execute_query(create_user_table())
     execute_query(create_project_table())
     execute_query(create_season_table())
 
 
 def display_results(results, headers):
+    '''Displays database query results in a table format using the tabulate library.'''
     if results:
         table = tabulate(results, headers=headers, tablefmt="grid")
         print(table)
@@ -22,6 +24,7 @@ def display_results(results, headers):
 
 
 def user_menu():
+    '''Displays the user menu with options to create a project or view created projects.'''
     while True:
         print("\n--- User Menu ---")
         print("1. Create Project")
@@ -30,6 +33,7 @@ def user_menu():
         choice = input("Select an option: ")
 
         if choice == '1':
+            '''Handles project creation by prompting the user for project details.'''
             print("Categories:")
             print("1. Local Infrastructure Improvement")
             print("2. Social Services")
@@ -67,11 +71,13 @@ def user_menu():
             print(result)
 
         elif choice == '2':
+            '''Displays all projects created by the user.'''
             projects = view_all_projects()
             headers = ["ID", "Name", "Category", "Description", "Budget", "Location", "Approved"]
             display_results(projects, headers)
 
         elif choice == '3':
+            '''Exits the user menu'''
             print("Exiting the system.")
             break
 
@@ -80,6 +86,7 @@ def user_menu():
 
 
 def admin_menu():
+    '''Displays the admin menu with options to manage seasons, projects, and view statistics.'''
     while True:
         print("\n--- Admin Menu ---")
         print("1. Open/Close Season")
@@ -94,6 +101,7 @@ def admin_menu():
         choice = input("Select an option: ")
 
         if choice == '1':
+            '''Handles the opening or closing of a season.'''
             action = input("Do you want to (o)pen or (c)lose a season? (o/c): ").strip().lower()
             if action == 'o':
                 season_name = input("Enter the name of the new season: ")
@@ -118,18 +126,22 @@ def admin_menu():
                     print("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
 
         elif choice == '2':
+            '''Manages project submissions by viewing, approving, or rejecting projects.'''
             sub_choice = input("Select Manage Submissions option (a-c): ")
             if sub_choice == 'a':
+                '''View all submitted projects.'''
                 projects = view_all_projects()
                 headers = ["ID", "Name", "Category", "Description", "Budget", "Location", "Approved"]
                 display_results(projects, headers)
 
             elif sub_choice == 'b':
+                '''Approve a specific project by ID.'''
                 project_id = int(input("Enter project ID to approve: "))
                 result = approve_project(project_id)
                 print(result)
 
             elif sub_choice == 'c':
+                '''Reject a specific project by ID.'''
                 project_id = int(input("Enter project ID to reject: "))
                 result = reject_project(project_id)
                 print(result)
@@ -138,21 +150,25 @@ def admin_menu():
                 print("Invalid choice. Please try again.")
 
         elif choice == '3':
+            '''View all approved projects.'''
             projects = view_all_approved_projects()
             headers = ["ID", "Name", "Category", "Description", "Budget", "Location", "Approved"]
             display_results(projects, headers)
 
         elif choice == '4':
+            '''View all rejected projects.'''
             projects = view_all_rejected_projects()
             headers = ["ID", "Name", "Category", "Description", "Budget", "Location", "Approved"]
             display_results(projects, headers)
 
         elif choice == '5':
+            '''View all seasons and their statuses.'''
             seasons = view_all_seasons_with_status()
             headers = ["Season Name", "Open Time", "Close Time", "Status"]
             display_results(seasons, headers)
 
         elif choice == '6':
+            '''Exits the admin menu.'''
             print("Exiting the system.")
             break
 
@@ -161,6 +177,7 @@ def admin_menu():
 
 
 def main_menu():
+    '''Displays the main menu with options to register, log in, or exit the system.'''
     while True:
         print("\nMain Menu:")
         print("1. Register")
@@ -169,12 +186,14 @@ def main_menu():
         choice = input("Select an option: ")
 
         if choice == '1':
+            '''Registers a new user by prompting for username and password.'''
             username = input("Enter username: ")
             password = input("Enter password: ")
             result = register_user(username, password)
             print(result)
 
         elif choice == '2':
+            '''Logs in a user or admin and redirects to the appropriate menu.'''
             username = input("Enter username: ")
             password = input("Enter password: ")
             result = login_user(username, password)
@@ -187,6 +206,7 @@ def main_menu():
                     user_menu()
 
         elif choice == '3':
+            '''Exits the main menu and terminates the program.'''
             print("Exiting the system.")
             break
 
